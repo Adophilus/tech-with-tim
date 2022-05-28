@@ -46,7 +46,7 @@ def redrawGameWindow ():
     WIN.blit(CHAR, (X, Y))
   pygame.display.update()
 
-while (RUN):
+while RUN:
   CLOCK.tick(FPS)
 
   for event in pygame.event.get():
@@ -73,16 +73,15 @@ while (RUN):
       IS_JUMP = True
       LEFT = False
       RIGHT = False
+  elif (JUMP_COUNT >= -10):
+    NEG = 1
+    if (JUMP_COUNT < 0):
+      NEG = -1
+    Y -= JUMP_COUNT ** 2 * 0.5 * NEG
+    JUMP_COUNT -= 1
   else:
-    if (JUMP_COUNT >= -10):
-      NEG = 1
-      if (JUMP_COUNT < 0):
-        NEG = -1
-      Y -= JUMP_COUNT ** 2 * 0.5 * NEG
-      JUMP_COUNT -= 1
-    else:
-      IS_JUMP = False
-      JUMP_COUNT = 10  
+    IS_JUMP = False
+    JUMP_COUNT = 10  
 
   redrawGameWindow()
 

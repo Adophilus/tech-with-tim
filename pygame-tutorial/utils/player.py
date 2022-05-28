@@ -30,23 +30,22 @@ class Player ():
     self.standing = True
     self.screenWidth, self.screenHeight = self.window.get_size()
 
-  def draw (self):
+  def draw(self):
     if (self.WALK_COUNT >= 27):
       self.WALK_COUNT = 0
 
-    if (not self.standing):
-      if (self.left):
-        self.window.blit(self.WALK_LEFT[self.WALK_COUNT // 3], (self.x, self.y))
-        self.WALK_COUNT += 1
-      elif (self.right):
-        self.window.blit(self.WALK_RIGHT[self.WALK_COUNT // 3], (self.x, self.y))
-        self.WALK_COUNT += 1
-    else:
+    if self.standing:
       if (self.right):
         self.window.blit(self.WALK_RIGHT[0], (self.x, self.y))
       else:
         self.window.blit(self.WALK_LEFT[0], (self.x, self.y))
 
+    elif self.left:
+      self.window.blit(self.WALK_LEFT[self.WALK_COUNT // 3], (self.x, self.y))
+      self.WALK_COUNT += 1
+    elif (self.right):
+      self.window.blit(self.WALK_RIGHT[self.WALK_COUNT // 3], (self.x, self.y))
+      self.WALK_COUNT += 1
     for bullet in self.BULLETS:
       if (not bullet.shouldDraw):
         self.BULLETS.remove(bullet)
@@ -56,7 +55,7 @@ class Player ():
   def event (self, event):
     pass
 
-  def keyPress (self, keys: list):
+  def keyPress(self, keys: list):
     if (keys[self.KEY_LEFT] and (self.x - self.vel) > 0):
       self.move("left")
     elif (keys[self.KEY_RIGHT] and (self.x + self.vel + self.width) < self.screenWidth):
@@ -68,19 +67,17 @@ class Player ():
     if (keys[self.KEY_SHOOT]):
       self._shootBullet()
 
-    if (not self.isJump):
-      if (keys[self.KEY_JUMP]):
-        self.isJump = True
-    else:
+    if self.isJump:
       if (self.jumpCount >= -10):
-        NEG = 1
-        if (self.jumpCount < 0):
-          NEG = -1
+        NEG = -1 if (self.jumpCount < 0) else 1
         self.y -= self.jumpCount ** 2 * 0.5 * NEG
         self.jumpCount -= 1
       else:
         self.isJump = False
         self.jumpCount = 10 
+
+    elif keys[self.KEY_JUMP]:
+      self.isJump = True 
 
   def move (self, direction: str):
     direction = direction.lower()

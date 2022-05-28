@@ -17,7 +17,7 @@ WIN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.display.set_caption("First Game")
 
-while (RUN):
+while RUN:
   pygame.time.delay(50)
 
   for event in pygame.event.get():
@@ -38,16 +38,15 @@ while (RUN):
       Y += VEL
     if (keys[pygame.K_SPACE]):
       IS_JUMP = True
+  elif (JUMP_COUNT >= -10):
+    NEG = 1
+    if (JUMP_COUNT < 0):
+      NEG = -1
+    Y -= JUMP_COUNT ** 2 * 0.5 * NEG
+    JUMP_COUNT -= 1
   else:
-    if (JUMP_COUNT >= -10):
-      NEG = 1
-      if (JUMP_COUNT < 0):
-        NEG = -1
-      Y -= JUMP_COUNT ** 2 * 0.5 * NEG
-      JUMP_COUNT -= 1
-    else:
-      IS_JUMP = False
-      JUMP_COUNT = 10
+    IS_JUMP = False
+    JUMP_COUNT = 10
 
   WIN.fill((0, 0, 0))
   pygame.draw.ellipse(WIN, PLAYER_COLOR, (X, Y, PLAYER_WIDTH, PLAYER_HEIGHT))
